@@ -1,0 +1,43 @@
+.appContainer {
+  display: grid;
+  grid-template-columns: 20% 80%;
+  position: relative;
+}
+
+.content {
+  grid-column: 2;
+}
+
+.sidebar {
+  height: 100vh;
+  position: sticky;
+  top: 0;
+  overflow-y: auto;
+}
+.tags {
+  margin: 10px 0;
+  span {
+    margin-right: 5px;
+  }
+}
+.bar {
+  background-color: rgb(212, 212, 212);
+  height: 1px;
+  margin: 10px 0;
+}
+.postForm {
+  margin: 2% 5%;
+  padding: 20px;
+  border: 1px solid rgb(212, 212, 212);
+  border-radius: 20px;
+}
+.postContainer {
+  display: flex;
+  gap: 20px;
+  padding: 20px;
+  flex-wrap: wrap;
+}
+.reactions {
+  display: flex;
+  gap: 5px;
+}
