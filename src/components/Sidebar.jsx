@@ -1,22 +1,32 @@
-const Sidebar = ({activeTab, setActiveTab}) => {
+import { NavLink } from 'react-router-dom';
 
+const Sidebar = () => {
   return (
-    <div
-      className="d-flex flex-column flex-shrink-0 p-3 text-bg-dark sidebar"
-    >
+    <div className="d-flex flex-column flex-shrink-0 p-3 text-bg-dark sidebar">
       <a
         href="/"
         className="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none"
       >
-        <svg className="bi pe-none me-2" width="40" height="32" aria-hidden="true">
+        <svg
+          className="bi pe-none me-2"
+          width="40"
+          height="32"
+          aria-hidden="true"
+        >
           <use xlinkHref="#bootstrap"></use>
         </svg>
         <span className="fs-4">Post-It</span>
       </a>
       <hr />
       <ul className="nav nav-pills flex-column mb-auto">
-        <li className="nav-item" onClick={()=> setActiveTab("Home")}>
-          <a href="#" className={`nav-link text-white ${activeTab==="Home" && "active"}`} aria-current="page">
+        <li className="nav-item">
+          <NavLink
+            to="/"
+            className={({ isActive }) => 
+              `nav-link text-white ${isActive ? "active" : ""}`
+            }
+            end
+          >
             <svg
               className="bi pe-none me-2"
               width="16"
@@ -26,10 +36,15 @@ const Sidebar = ({activeTab, setActiveTab}) => {
               <use xlinkHref="#home"></use>
             </svg>
             Home
-          </a>
+          </NavLink>
         </li>
-        <li className="nav-item" onClick={()=> setActiveTab("Create Post")}>
-          <a href="#" className={`nav-link text-white ${activeTab==="Create Post" && "active"}`}>
+        <li className="nav-item">
+          <NavLink
+            to="/create-post"
+            className={({ isActive }) => 
+              `nav-link text-white ${isActive ? "active" : ""}`
+            }
+          >
             <svg
               className="bi pe-none me-2"
               width="16"
@@ -39,7 +54,7 @@ const Sidebar = ({activeTab, setActiveTab}) => {
               <use xlinkHref="#speedometer2"></use>
             </svg>
             Create Post
-          </a>
+          </NavLink>
         </li>
       </ul>
       <hr />

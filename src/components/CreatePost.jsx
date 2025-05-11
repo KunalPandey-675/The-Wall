@@ -1,36 +1,52 @@
 import { useRef, useState } from "react";
 import { useContext } from "react";
 import { PostList } from "../store/postStoreList";
+import { useNavigate } from "react-router-dom";
 
 const CreatePost = () => {
-  const {addPost} = useContext(PostList);
+  const { addPost } = useContext(PostList);
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
-
+  const navigate = useNavigate();
   const usernameElement = useRef();
   const titleElement = useRef();
   const descElement = useRef();
   const tagsElement = useRef();
 
   const submitHandler = (e) => {
-    e.preventDefault()
-    const userName= usernameElement.current.value;
-    const title= titleElement.current.value;
-    const desc= descElement.current.value;
-    const tags= tagsElement.current.value.split(" ");
-    
-    addPost(userName, title, desc, tags);
+    e.preventDefault();
+    const userName = usernameElement.current.value;
+    const title = titleElement.current.value;
+    const desc = descElement.current.value;
+    const tags = tagsElement.current.value.split(" ");
 
     usernameElement.current.value = "";
     titleElement.current.value = "";
     descElement.current.value = "";
     tagsElement.current.value = "";
     
+    fetch("https://dummyjson.com/posts/add", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        userId: userName,
+        title: title,
+        body: desc,
+        tags,
+        reactions: { likes: 0, dislikes: 0 },
+      }),
+    })
+      .then((res) => res.json())
+      .then((post) => {
+        addPost(post);
+        navigate("/");
+      });
+
     setShowSuccessMessage(true);
-    
+
     setTimeout(() => {
       setShowSuccessMessage(false);
     }, 2500);
-  }
+  };
 
   return (
     <>
@@ -39,7 +55,7 @@ const CreatePost = () => {
           Post created successfully!
         </div>
       )}
-      
+
       <form className="postForm" onSubmit={submitHandler}>
         <div className="mb-2">
           <label htmlFor="userName" className="form-label">
