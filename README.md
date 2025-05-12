@@ -1,7 +1,7 @@
 # 🧱 The Wall - A React-Based Microblogging Platform
 
 
-_The Wall_ is a responsive, minimalistic microblogging platform built with **React**. Inspired by Twitter, it allows users to share bite-sized content with tags, likes, and more. Designed to offer a clean user experience with a sleek dark mode interface, **The Wall** is perfect for users looking to post, explore, and interact with short stories or thoughts.
+_The Wall_ is a responsive, minimalistic microblogging platform built with **React**. Inspired by Twitter, it allows users to share bite-sized content with tags, likes, and more. Designed to offer a clean user experience with a sleek interface, **The Wall** is perfect for users looking to post, explore, and interact with short stories or thoughts.
 
 ---
 
