@@ -48,6 +48,9 @@
   padding: 20px;
   flex-wrap: wrap;
 }
+.footer{
+  justify-content: center;
+}
 .reactions {
   display: flex;
   gap: 5px;
