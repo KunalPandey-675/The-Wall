@@ -66,7 +66,7 @@ const CreatePost = () => {
             type="text"
             className="form-control"
             id="userName"
-            placeholder="Your User ID"
+            placeholder="Your User ID(Number eg. 1,2,3..)"
             required
           />
         </div>
