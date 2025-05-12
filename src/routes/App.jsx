@@ -11,7 +11,9 @@ function App() {
   return (
     <PostListProvider>
       <div className="appContainer">
-        <Sidebar/>
+        <div className="left">
+          <Sidebar />
+        </div>
         <div className="content">
           <Header />
           <Outlet />

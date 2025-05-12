@@ -17,7 +17,7 @@ const CreatePost = () => {
     const userName = usernameElement.current.value;
     const title = titleElement.current.value;
     const desc = descElement.current.value;
-    const tags = tagsElement.current.value.split(" ");
+    const tags = tagsElement.current.value.split(",");
 
     usernameElement.current.value = "";
     titleElement.current.value = "";
@@ -106,7 +106,7 @@ const CreatePost = () => {
             type="text"
             className="form-control"
             id="postTags"
-            placeholder="Enter tags separated by space"
+            placeholder="Enter tags separated by commas"
             required
           />
         </div>
