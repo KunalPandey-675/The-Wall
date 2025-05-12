@@ -1,12 +1,73 @@
-# React + Vite
+# 🧱 The Wall - A React-Based Microblogging Platform
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-Currently, two official plugins are available:
+_The Wall_ is a responsive, minimalistic microblogging platform built with **React**. Inspired by Twitter, it allows users to share bite-sized content with tags, likes, and more. Designed to offer a clean user experience with a sleek dark mode interface, **The Wall** is perfect for users looking to post, explore, and interact with short stories or thoughts.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) htmlFor Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) htmlFor Fast Refresh
+---
 
-## Expanding the ESLint configuration
+## 📌 Features
 
-If you are developing a production application, we recommend using TypeScript and enable type-aware lint rules. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- 📝 **Create Post**: Share short stories, thoughts, or quotes.
+- 🗃 **Categorized Tags**: Add tags like `#fiction`, `#history`, `#crime` to group your posts.
+- ❤️ **Like Posts**: Users can like individual posts.
+- 👀 **View Count**: Displays the number of views each post has received.
+- 🧹 **Delete Post**: Users can delete their own posts.
+- 🔐 **Authentication (Coming Soon)**: Login/Signup feature with protected routes.
+- 🗂 **Profile View (Coming Soon)**: View your personal posts and stats.
+- 🌐 **Feed Filtering (Coming Soon)**: Filter posts by tags or popularity.
+
+---
+
+## 🖼 Preview
+Try it live in your browser: [THE WALL](https://thewall-gules.vercel.app/)
+
+<img src="https://github.com/user-attachments/assets/1a406bad-abf4-44b2-b056-9cd28a7ad64d" width="800px">
+
+[Watch demo Video](https://github.com/user-attachments/assets/b832dacf-7177-42d0-a00b-2ac17f8b17d1)
+
+
+
+
+
+
+---
+
+## 🚀 Tech Stack
+
+| Tech        | Description                            |
+|-------------|----------------------------------------|
+| React       | Frontend library for building the UI   |
+| CSS / SCSS  | For component styling and layout       |
+| React Router| Page navigation and routing            |
+| Dummy API   | Used to fetch realistic post data for development purposes|
+| UUID        | For generating unique post IDs         |
+| Context API | Global state management                |
+
+---
+
+## 💡 Future Enhancements
+
+- 🔐 **Full user authentication (Sign Up/Login)**
+- 🧑‍🤝‍🧑 **User-specific profiles**
+- 🔎 **Tag-based post filtering**
+- 🧾 **Comment system**
+- 📱 **Progressive Web App (PWA) support**
+
+---
+
+## 🙌 Contributing
+
+Contributions are welcome!  
+Feel free to open an issue to discuss any ideas or report bugs.  
+Pull requests for improvements, bug fixes, or new features are highly appreciated.
+
+---
+
+## 📬 Contact
+
+📧 Reach out at: [Portfolio](https://kunalpandey.vercel.app/)  
+🔗 [LinkedIn](https://linkedin.com/in/kunalpandey2084) | [GitHub](https://github.com/KunalPandey-675)
+
+---
+
+
