@@ -97,18 +97,6 @@ const Header = () => {
       </div>
       <header className="p-3 text-bg-dark header ">
         <div className="d-flex align-items-center justify-content-center justify-content-lg-start navContainer">
-          {/* <ul className="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0 navUl">
-            <li>
-              <NavLink to="/" end className="nav-link px-2 text-white">
-                Home
-              </NavLink>
-            </li>
-            <li>
-              <NavLink to="/create-post" className="nav-link px-2 text-white">
-                Create Post
-              </NavLink>
-            </li>
-          </ul> */}
           <ul className="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0 navUl nav-pills mb-auto">
             <li className="nav-item">
               <NavLink

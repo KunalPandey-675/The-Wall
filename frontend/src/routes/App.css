@@ -150,7 +150,7 @@
     position: sticky;
   }
   .content {
-    width: 78%;
+    width: 100%;
   }
   /* styles for large devices */
   .header {

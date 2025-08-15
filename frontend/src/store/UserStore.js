@@ -9,6 +9,7 @@ const useUserStore = create((set, get) => ({
     isAuthenticated: false,
     user: null,
     loading: false,
+    postsLoading: false,
     error: null,
     formData: null,
     userPosts: [],
@@ -21,9 +22,10 @@ const useUserStore = create((set, get) => ({
     loginSuccess: (user) => set({ isAuthenticated: true, user, loading: false }),
     loginFailure: (error) => set({ loading: false, error }),
 
-    postFetchStart: () => { set({ loading: true, error: null }) },
-    postFetchSuccess: (userPosts) => set({ userPosts, loading: false }),
-    postFetchFailure: (error) => set({ loading: false, error }),
+    postFetchStart: () => { set({ postsLoading: true, error: null }) },
+    postFetchSuccess: (userPosts) => set({ userPosts, postsLoading: false }),
+    postFetchFailure: (error) => set({ postsLoading: false, error }),
+
     checkAuth: async () => {
         set({ loading: true, error: null });
         try {
@@ -143,24 +145,41 @@ const useUserStore = create((set, get) => ({
         }
 
     },
+    // myPosts: async () => {
+    //     set({ loading: true, error: null })
+    //     try {
+    //         const response = await axios.get(`${BASE_URL}/user/my-posts`, {
+    //             withCredentials: true,
+    //         })
+    //         if (response.data?.success) {
+    //             get().postFetchSuccess(response.data.data); // Now correctly expects data
+    //         } else {
+    //             get().postFetchFailure('Failed to fetch posts');
+    //         }
+    //         console.log('posts', response.data)
+    //     } catch (error) {
+    //         console.error("Post fetch Error:", error.response?.data);
+    //         get().postFetchFailure(error.response?.data?.message || 'Post Fetch Failed');
+    //     } finally {
+    //         set({ loading: false });
+    //     }
+    // }
     myPosts: async () => {
-        set({ loading: true, error: null })
+        get().postFetchStart();
         try {
             const response = await axios.get(`${BASE_URL}/user/my-posts`, {
                 withCredentials: true,
-            })
+            });
             if (response.data?.success) {
-                get().postFetchSuccess(response.data.data); // Now correctly expects data
+                get().postFetchSuccess(response.data.data);
             } else {
                 get().postFetchFailure('Failed to fetch posts');
             }
-            console.log('posts', response.data)
+            console.log('posts', response.data);
         } catch (error) {
             console.error("Post fetch Error:", error.response?.data);
             get().postFetchFailure(error.response?.data?.message || 'Post Fetch Failed');
-        } finally {
-            set({ loading: false }); 
         }
-    }
+    },
 }))
 export default useUserStore;

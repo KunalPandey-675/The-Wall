@@ -1,13 +1,18 @@
 import React, { useEffect } from "react";
 import useUserStore from "../store/UserStore";
 
+import MyPostCard from "../components/MyPostCard";
 const MyPosts = () => {
-  const { myPosts, loading, userPosts, error } = useUserStore();
-  useEffect(() => {
-    myPosts();
-  }, [myPosts]);
+  const myPostsFn = useUserStore((state) => state.myPosts);
+  const postsLoading = useUserStore((state) => state.postsLoading);
+  const userPosts = useUserStore((state) => state.userPosts);
+  const error = useUserStore((state) => state.error);
 
-  if (loading) {
+  useEffect(() => {
+    myPostsFn();
+  }, [myPostsFn]);
+
+  if (postsLoading) {
     return (
       <div className="container mt-4">
         <div className="alert alert-info">Loading your posts...</div>
@@ -16,7 +21,6 @@ const MyPosts = () => {
   }
 
   if (error) {
-    // Added error handling
     return (
       <div className="container mt-4">
         <div className="alert alert-danger">Error: {error}</div>
@@ -37,12 +41,9 @@ const MyPosts = () => {
   return (
     <div className="my-posts-page container mt-4">
       <h1 className="mb-4">My Posts</h1>
-      <div className="row justify-content-center">
+      {/* <div className="row justify-content-center">
         <div className="col-md-10">
-          <div className="card">
-            <div className="card-header">
-              <h2 className="mb-0">My Posts</h2>
-            </div>
+          <div className="card border-danger">
             <div className="card-body">
               {userPosts ? (
                 <div>
@@ -64,6 +65,17 @@ const MyPosts = () => {
             </div>
           </div>
         </div>
+      </div> */}
+      <div className="postList">
+        {userPosts && userPosts.length
+          ? userPosts.map((post) => (
+              <MyPostCard key={post._id} post={post} />
+            ))
+          : (
+            <p className="text-center text-muted">
+              You haven't created any posts yet.
+            </p>
+          )}
       </div>
     </div>
   );
