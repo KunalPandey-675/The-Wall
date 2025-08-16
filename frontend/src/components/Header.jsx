@@ -6,6 +6,7 @@ import useUserStore from "../store/UserStore";
 
 const Header = () => {
   const [isOpen, setOpen] = useState(false);
+  const [showLogoutPopup, setShowLogoutPopup] = useState(false);
   const sidebarRef = useRef();
   const { isAuthenticated, logout } = useUserStore();
 
@@ -24,6 +25,7 @@ const Header = () => {
       ease: "power2.out",
     });
   };
+
   useEffect(() => {
     if (isOpen) {
       openSidebar();
@@ -32,6 +34,16 @@ const Header = () => {
     }
   }, [isOpen]);
 
+  // Auto-hide logout popup after 3 seconds
+  useEffect(() => {
+    if (showLogoutPopup) {
+      const timer = setTimeout(() => {
+        setShowLogoutPopup(false);
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [showLogoutPopup]);
+
   const handleClose = () => {
     setOpen(false);
   };
@@ -39,12 +51,33 @@ const Header = () => {
   const handleLogout = async () => {
     // ensure the ham menu closes when logout is triggered from it
     setOpen(false);
-    await logout();
-    window.location.href = "/login";
+    const result = await logout();
+    
+    if (result.success) {
+      setShowLogoutPopup(true);
+    }
   };
 
   return (
     <>
+      {/* Logout Success Popup */}
+      {showLogoutPopup && (
+        <div 
+          className="position-fixed top-0 start-50 translate-middle-x mt-3 alert alert-success alert-dismissible fade show" 
+          style={{ zIndex: 9999, minWidth: '300px' }}
+          role="alert"
+        >
+          <i className="bi bi-check-circle-fill me-2"></i>
+          Logged out successfully!
+          <button 
+            type="button" 
+            className="btn-close" 
+            onClick={() => setShowLogoutPopup(false)}
+            aria-label="Close"
+          ></button>
+        </div>
+      )}
+
       <div
         className=" flex-column flex-shrink-0 p-3 text-bg-dark hamMenu"
         ref={sidebarRef}
@@ -94,23 +127,6 @@ const Header = () => {
           </li>
         </ul>
         <hr />
-        {/* <div className="dropdown">
-          <a
-            href="#"
-            className="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
-            data-bs-toggle="dropdown"
-            aria-expanded="false"
-          >
-            <img
-              src="https://github.com/mdo.png"
-              alt=""
-              width="32"
-              height="32"
-              className="rounded-circle me-2"
-            />
-            <strong>mdo</strong>
-          </a>
-        </div> */}
         <div className="d-flex justify-content-center">
           {isAuthenticated ? (
             <>
@@ -138,6 +154,7 @@ const Header = () => {
               >
                 Login
               </NavLink>
+              
               <NavLink
                 to="/signup"
                 className="btn btn-warning"
@@ -193,18 +210,6 @@ const Header = () => {
             </li>
           </ul>
           <div className="navTools ms-4 d-flex align-items-center h-100">
-            {/* <form
-              className="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3 searchBar"
-              role="search"
-            >
-              <input
-                type="search"
-                className="form-control form-control-dark text-bg-dark"
-                placeholder="Search..."
-                aria-label="Search"
-              />
-            </form> */}
-
             <div className="text-end navBtn">
               {isAuthenticated ? (
                 <>

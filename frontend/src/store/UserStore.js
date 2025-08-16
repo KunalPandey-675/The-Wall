@@ -61,16 +61,32 @@ const useUserStore = create((set, get) => ({
             await axios.post(`${BASE_URL}/user/logout`, {}, {
                 withCredentials: true,
             });
-        } catch (error) {
-            console.error("Logout error:", error);
-        } finally {
+            
+            // Clear the local state
             set({
                 isAuthenticated: false,
                 user: null,
                 loading: false,
                 error: null,
-                formData: null
+                formData: null,
+                userPosts: []
             });
+            
+            return { success: true, message: "Logged out successfully!" };
+        } catch (error) {
+            console.error("Logout error:", error);
+            
+            // Still clear local state even if API fails
+            set({
+                isAuthenticated: false,
+                user: null,
+                loading: false,
+                error: null,
+                formData: null,
+                userPosts: []
+            });
+            
+            return { success: true, message: "Logged out successfully!" }; // Still show success since user is logged out locally
         }
     },
 

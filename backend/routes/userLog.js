@@ -194,10 +194,12 @@ userLogRouter.post("/sign-in", async (req, res) => {
 
 userLogRouter.post("/logout", async (req, res) => {
     try {
+        // Clear the cookie with the same settings used when setting it
         res.clearCookie("jwt", {
             httpOnly: true,
-            secure: false,
-            sameSite: "lax",
+            secure: process.env.NODE_ENV === 'production', // Match the secure setting
+            sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax', // Match sameSite setting
+            path: '/' // Explicitly set the path
         });
 
         res.status(200).json({

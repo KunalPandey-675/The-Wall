@@ -4,14 +4,14 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import Sidebar from "../components/Sidebar";
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import useUserStore from "../store/UserStore";
 import Loader from "../components/Loader";
 import Popup from "../components/PopUp";
 
 function App() {
-  const { checkAuth, loading } = useUserStore();
-
+  const { checkAuth, loading, isAuthenticated } = useUserStore();
+  const navigate = useNavigate();
 
   const [popup, setPopup] = useState({ show: false, message: "" });
 
@@ -21,6 +21,14 @@ function App() {
     checkAuth();
   }, []);
 
+  // Handle authentication state changes
+  useEffect(() => {
+    const currentPath = window.location.pathname;
+    // If user logged out and is on a protected route, redirect to home
+    if (!isAuthenticated && !loading && (currentPath === '/profile' || currentPath === '/my-posts' || currentPath === '/create-post')) {
+      navigate('/', { replace: true });
+    }
+  }, [isAuthenticated, loading, navigate]);
 
   if (loading) {
     return <Loader />;
@@ -28,9 +36,6 @@ function App() {
 
   return (
     <div className="appContainer">
-      {/* <div className="left">
-        <Sidebar />
-      </div> */}
       <div className="content">
         <Header />
         <Outlet />
