@@ -14,17 +14,17 @@ const { adminLogRouter } = require("./routes/adminLog");
 
 const { postRouter } = require("./routes/post")
 const { checkAuthRouter } = require("./routes/authCheck")
-const {userAuth}= require('./controllers/Auth')
+const { userAuth } = require('./controllers/Auth')
 
 app.use(express.json())
 app.use(cors({
-    origin: "http://localhost:5173",
+    origin: ["http://localhost:5173", "https://the-wall-five.vercel.app"],
     credentials: true
 }));
 app.use("/api/user", userLogRouter)
 app.use("/api/admin", adminLogRouter)
 app.use("/api/post", postRouter)
-app.use("/api/auth", userAuth,checkAuthRouter)
+app.use("/api/auth", userAuth, checkAuthRouter)
 
 
 app.get("/", (req, res) => {
