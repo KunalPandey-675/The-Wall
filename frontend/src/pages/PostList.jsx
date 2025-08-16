@@ -7,7 +7,7 @@ import axios from "axios";
 const BASE_URL =
   import.meta.env.MODE === "development"
     ? "http://localhost:3000/api"
-    : "/api";
+    : "https://the-wall-backend.onrender.com/api"; // Use your actual backend URL
 
 const PostList = () => {
   const postList = usePostStore((state) => state.posts);

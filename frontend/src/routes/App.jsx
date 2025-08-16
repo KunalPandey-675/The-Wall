@@ -5,13 +5,11 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import Sidebar from "../components/Sidebar";
 import { Outlet } from "react-router-dom";
-import usePostStore from "../store/postStoreList";
 import useUserStore from "../store/UserStore";
 import Loader from "../components/Loader";
 import Popup from "../components/PopUp";
 
 function App() {
-  const fetchInitialPosts = usePostStore((s) => s.fetchInitialPosts);
   const { checkAuth, loading } = useUserStore();
 
 
@@ -20,7 +18,6 @@ function App() {
   window.showLoginPopup = (msg = "Please login") => setPopup({ show: true, message: msg });
 
   useEffect(() => {
-    fetchInitialPosts();
     checkAuth();
   }, []);
 

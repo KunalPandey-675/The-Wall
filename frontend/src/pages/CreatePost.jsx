@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import usePostStore from "../store/postStoreList";
+
 import useUserStore from "../store/UserStore";
 
 const CreatePost = () => {
