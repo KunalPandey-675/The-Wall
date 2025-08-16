@@ -7,7 +7,6 @@ const CreatePost = () => {
   const { createPost, error, user } = useUserStore();
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const navigate = useNavigate();
-  const usernameElement = useRef();
   const titleElement = useRef();
   const descElement = useRef();
   const tagsElement = useRef();
@@ -23,7 +22,6 @@ const CreatePost = () => {
       },
       navigate
     );
-    usernameElement.current.value = "";
     titleElement.current.value = "";
     descElement.current.value = "";
     tagsElement.current.value = "";

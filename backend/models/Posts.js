@@ -8,6 +8,7 @@ const post = new Schema({
     body: { type: String, required: true },
     tags: [],
     likes: { type: Number, default: 0 },
+    likedBy: [{ type: ObjectId, ref: "User" }],
     views: { type: Number, default: 0 },
     createdBy: { type: ObjectId, ref: "User", required: true },
     creatorName:{type:String, default:""}

@@ -1,39 +1,57 @@
-import { FaHeart } from "react-icons/fa6";
+import { useState, useEffect } from "react";
+import { FaHeart, FaRegHeart } from "react-icons/fa6";
 import { IoMdEye } from "react-icons/io";
-import { IoTrashBin } from "react-icons/io5";
-import usePostStore from "../store/postStoreList";
+import usePostStore from "../store/PostStore";
 
 const Post = ({ post }) => {
-  const removePost = usePostStore((s) => s.removePost);
+  const [isLiked, setIsLiked] = useState(post.isLiked || false);
+  const [isLiking, setIsLiking] = useState(false);
+  const likePost = usePostStore((s) => s.likePost);
+
+  const handleLike = async () => {
+    if (isLiking) return;
+    
+    setIsLiking(true);
+    try {
+      const liked = await likePost(post._id);
+      if (liked !== undefined) {
+        setIsLiked(liked);
+      }
+    } catch (error) {
+      console.error("Error liking post:", error);
+    } finally {
+      setIsLiking(false);
+    }
+  };
+
   return (
-    <div className="card" style={{ width: "18rem"}}>
+    <div className="card" style={{ width: "18rem" }}>
       <div className="card-body">
-        <h5 className="card-title">{post.title} </h5>
-        {/* <span
-          className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
-          onClick={() => removePost(post.id)}
-        >
-          <IoTrashBin />
-        </span> */}
+        <h5 className="card-title">{post.title}</h5>
         <p className="card-text">{post.body}</p>
         <div className="tags">
-          {post.tags && post.tags.map((tag) => (
-            <span key={tag} className="badge text-bg-primary">
+          {post.tags && post.tags.map((tag, index) => (
+            <span key={index} className="badge text-bg-primary me-1">
               {tag}
             </span>
           ))}
         </div>
         <div className="reactions">
-          <span className="badge text-bg-primary">
-            <FaHeart /> 
-            {post.reactions ? post.reactions.likes : 0}
+          <span 
+            className={`badge ${isLiked ? 'text-bg-danger' : 'text-bg-primary'} me-2`}
+            style={{ cursor: 'pointer' }}
+            onClick={handleLike}
+            disabled={isLiking}
+          >
+            {isLiked ? <FaHeart /> : <FaRegHeart />}
+            {post.likes || 0}
           </span>
           <span className="badge text-bg-primary">
-            <IoMdEye /> {post.reactions ? post.reactions.dislikes : 0}
+            <IoMdEye /> {post.views || 0}
           </span>
         </div>
         <div className="bar"></div>
-        <p>{post.creatorName} </p>
+        <p>{post.creatorName}</p>
       </div>
     </div>
   );

@@ -1,16 +1,31 @@
 const express = require('express')
 const { Router } = require('express')
 const { z, success } = require('zod')
-const { userAuth } = require('../controllers/Auth')
+const { userAuth, JWT_USER_SECRET } = require('../controllers/Auth')
 const { userSchema } = require('../models/User')
 const { postSchema } = require('../models/Posts')
+const jwt = require('jsonwebtoken')
 
 const app = express()
 const postRouter = Router()
 app.use(express.json())
 
+
+const optionalAuth = (req, res, next) => {
+    try {
+        const token = req.cookies.jwt;
+        if (token) {
+            const decoded = jwt.verify(token, JWT_USER_SECRET);
+            req.userId = decoded.id;
+        }
+        next();
+    } catch (e) {
+        next();
+    }
+};
+
 postRouter.post('/create-post', userAuth, async (req, res) => {
-    createdBy = req.userId
+    const createdBy = req.userId
     const requiredBody = z.object({
         title: z.string().min(3).max(100),
         body: z.string().min(10).max(200),
@@ -57,7 +72,7 @@ postRouter.post('/create-post', userAuth, async (req, res) => {
     }
 })
 postRouter.put('/update-post', userAuth, async (req, res) => {
-    createdBy = req.userId
+    const createdBy = req.userId
     const requiredBody = z.object({
         title: z.string().min(3).max(100),
         body: z.string().min(10).max(200),
@@ -102,13 +117,92 @@ postRouter.put('/update-post', userAuth, async (req, res) => {
         })
     }
 })
-postRouter.get('/all-posts', async (req, res) => {
-    const posts = await postSchema.find({})
-    res.json({
-        success: true,
-        data: posts
-    })
+postRouter.get('/all-posts', optionalAuth, async (req, res) => {
+    try {
+        const userId = req.userId; 
+        const posts = await postSchema.find({});
+        
+
+        const postsWithLikeStatus = posts.map(post => ({
+            ...post.toObject(),
+            isLiked: userId && post.likedBy && post.likedBy.includes(userId)
+        }));
+        
+        res.json({
+            success: true,
+            data: postsWithLikeStatus
+        });
+    } catch (e) {
+        console.error("Fetch posts error:", e);
+        return res.status(500).json({
+            success: false,
+            message: "Internal server error"
+        });
+    }
 })
+postRouter.patch('/like-post/:postId', userAuth, async (req, res) => {
+    const { postId } = req.params;
+    const userId = req.userId;
+
+    try {
+        const likedPost = await postSchema.findOneAndUpdate(
+            { 
+                _id: postId, 
+                likedBy: { $ne: userId } 
+            },
+            {
+                $inc: { likes: 1 },
+                $addToSet: { likedBy: userId }
+            },
+            { new: true }
+        );
+
+        if (likedPost) {
+            return res.status(200).json({
+                success: true,
+                message: "Post liked",
+                data: {
+                    likes: likedPost.likes,
+                    isLiked: true
+                }
+            });
+        }
+
+        const unlikedPost = await postSchema.findOneAndUpdate(
+            { 
+                _id: postId, 
+                likedBy: userId 
+            },
+            {
+                $inc: { likes: -1 },
+                $pull: { likedBy: userId }
+            },
+            { new: true }
+        );
+
+        if (unlikedPost) {
+            return res.status(200).json({
+                success: true,
+                message: "Post unliked",
+                data: {
+                    likes: unlikedPost.likes,
+                    isLiked: false
+                }
+            });
+        }
+        return res.status(404).json({
+            success: false,
+            message: "Post not found"
+        });
+
+    } catch (e) {
+        console.error("Like/Unlike error:", e);
+        return res.status(500).json({
+            success: false,
+            message: "Internal server error"
+        });
+    }
+});
 
 
 module.exports = {
