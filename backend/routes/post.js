@@ -203,6 +203,23 @@ postRouter.patch('/like-post/:postId', userAuth, async (req, res) => {
         });
     }
 });
+postRouter.patch('/increment-view/:postId', async (req, res) => {
+    try {
+        const { postId } = req.params;
+        const updatedPost = await postSchema.findByIdAndUpdate(
+            postId,
+            { $inc: { views: 1 } },
+            { new: true }
+        );
+        if (!updatedPost) {
+            return res.status(404).json({ success: false, message: "Post not found" });
+        }
+        res.json({ success: true, data: updatedPost.views });
+    } catch (e) {
+        console.error("Increment view error:", e);
+        res.status(500).json({ success: false, message: "Internal server error" });
+    }
+});
 
 
 module.exports = {

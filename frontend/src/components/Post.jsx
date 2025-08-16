@@ -2,15 +2,22 @@ import { useState, useEffect } from "react";
 import { FaHeart, FaRegHeart } from "react-icons/fa6";
 import { IoMdEye } from "react-icons/io";
 import usePostStore from "../store/PostStore";
+import useUserStore from "../store/UserStore";
 
 const Post = ({ post }) => {
   const [isLiked, setIsLiked] = useState(post.isLiked || false);
   const [isLiking, setIsLiking] = useState(false);
   const likePost = usePostStore((s) => s.likePost);
+  const { isAuthenticated } = useUserStore();
 
   const handleLike = async () => {
+    if (!isAuthenticated) {
+      window.showLoginPopup &&
+        window.showLoginPopup("Please login to like posts");
+      return;
+    }
     if (isLiking) return;
-    
+
     setIsLiking(true);
     try {
       const liked = await likePost(post._id);
@@ -30,16 +37,19 @@ const Post = ({ post }) => {
         <h5 className="card-title">{post.title}</h5>
         <p className="card-text">{post.body}</p>
         <div className="tags">
-          {post.tags && post.tags.map((tag, index) => (
-            <span key={index} className="badge text-bg-primary me-1">
-              {tag}
-            </span>
-          ))}
+          {post.tags &&
+            post.tags.map((tag, index) => (
+              <span key={index} className="badge text-bg-primary me-1">
+                {tag}
+              </span>
+            ))}
         </div>
         <div className="reactions">
-          <span 
-            className={`badge ${isLiked ? 'text-bg-danger' : 'text-bg-primary'} me-2`}
-            style={{ cursor: 'pointer' }}
+          <span
+            className={`badge ${
+              isLiked ? "text-bg-danger" : "text-bg-primary"
+            } me-2`}
+            style={{ cursor: "pointer" }}
             onClick={handleLike}
             disabled={isLiking}
           >
@@ -51,7 +61,9 @@ const Post = ({ post }) => {
           </span>
         </div>
         <div className="bar"></div>
-        <p>{post.creatorName}</p>
+        <strong>
+          <p>{post.creatorName}</p>
+        </strong>
       </div>
     </div>
   );

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Header from "../components/Header";
@@ -8,19 +8,23 @@ import { Outlet } from "react-router-dom";
 import usePostStore from "../store/postStoreList";
 import useUserStore from "../store/UserStore";
 import Loader from "../components/Loader";
+import Popup from "../components/PopUp";
 
 function App() {
   const fetchInitialPosts = usePostStore((s) => s.fetchInitialPosts);
   const { checkAuth, loading } = useUserStore();
 
+
+  const [popup, setPopup] = useState({ show: false, message: "" });
+
+  window.showLoginPopup = (msg = "Please login") => setPopup({ show: true, message: msg });
+
   useEffect(() => {
     fetchInitialPosts();
     checkAuth();
-    // fetch only once on mount to avoid update loops
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Show loader during initial auth check
+
   if (loading) {
     return <Loader />;
   }
@@ -34,6 +38,12 @@ function App() {
         <Header />
         <Outlet />
         <Footer />
+        {popup.show && (
+          <Popup
+            message={popup.message}
+            onClose={() => setPopup({ show: false, message: "" })}
+          />
+        )}
       </div>
     </div>
   );

@@ -113,7 +113,6 @@ const useUserStore = create((set, get) => ({
             const response = await axios.post(`${BASE_URL}/user/sign-in`, credentials, {
                 withCredentials: true,
             })
-            console.log(response.data.data);
             if (response.data?.success) {
                 get().loginSuccess(response.data.data);
                 navigate('/')
@@ -126,13 +125,14 @@ const useUserStore = create((set, get) => ({
         }
 
     },
-    createPost: async (postData) => {
+    createPost: async (postData, navigate) => {
         set({ loading: true, error: null })
         try {
             const response = await axios.post(`${BASE_URL}/post/create-post`, postData, {
                 withCredentials: true,
             })
             if (response.data?.success) {
+                navigate('/');
                 return { success: true, data: response.data.data };
             } else {
                 return { success: false };

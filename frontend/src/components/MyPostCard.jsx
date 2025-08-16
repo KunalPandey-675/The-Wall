@@ -1,34 +1,37 @@
 import { FaHeart } from "react-icons/fa6";
 import { IoMdEye } from "react-icons/io";
 import { IoTrashBin } from "react-icons/io5";
+import usePostStore from "../store/PostStore";
 
 const MyPostCard = ({ post }) => {
-  // const removePost = usePostStore((s) => s.removePost);
+  const removePost = usePostStore((s) => s.removePost);
+  
   return (
     <div className="card" style={{ width: "18rem"}}>
       <div className="card-body">
         <h5 className="card-title">{post.title} </h5>
         <span
           className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
-          onClick={() => removePost(post.id)}
+          onClick={() => removePost(post._id)}
+          style={{ cursor: 'pointer' }}
         >
           <IoTrashBin />
         </span>
         <p className="card-text">{post.body}</p>
         <div className="tags">
-          {post.tags && post.tags.map((tag) => (
-            <span key={tag} className="badge text-bg-primary">
+          {post.tags && post.tags.map((tag, index) => (
+            <span key={index} className="badge text-bg-primary me-1">
               {tag}
             </span>
           ))}
         </div>
         <div className="reactions">
-          <span className="badge text-bg-primary">
+          <span className="badge text-bg-primary me-2">
             <FaHeart /> 
-            {post.reactions ? post.reactions.likes : 0}
+            {post.likes || 0}
           </span>
           <span className="badge text-bg-primary">
-            <IoMdEye /> {post.reactions ? post.reactions.dislikes : 0}
+            <IoMdEye /> {post.views || 0}
           </span>
         </div>
       </div>
