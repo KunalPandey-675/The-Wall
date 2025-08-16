@@ -17,7 +17,7 @@ const { userAuth } = require('./controllers/Auth')
 
 app.use(express.json())
 
-// Updated CORS configuration for production
+// Single CORS configuration - remove the duplicate
 app.use(cors({
     origin: function (origin, callback) {
         // Allow requests with no origin (like mobile apps or curl requests)
@@ -26,7 +26,7 @@ app.use(cors({
         const allowedOrigins = [
             "http://localhost:5173",
             "https://the-wall-five.vercel.app",
-            "https://the-wall-backend.onrender.com" // Add your Render backend URL
+            "https://the-wall-backend.onrender.com"
         ];
         
         if (allowedOrigins.indexOf(origin) !== -1) {
@@ -40,9 +40,6 @@ app.use(cors({
     allowedHeaders: ['Content-Type', 'Authorization', 'x-csrf-token'],
     exposedHeaders: ['*', 'Authorization']
 }));
-
-// Handle preflight requests
-app.options('*', cors());
 
 app.use("/api/user", userLogRouter)
 app.use("/api/admin", adminLogRouter)

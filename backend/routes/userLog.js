@@ -213,7 +213,7 @@ userLogRouter.post("/logout", async (req, res) => {
     }
 });
 
-userLogRouter.get(("/my-posts"), userAuth, async (req, res) => {
+userLogRouter.get('/my-posts', userAuth, async (req, res) => {
     try {
         const userId = req.userId;
 
