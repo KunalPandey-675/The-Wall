@@ -32,7 +32,13 @@ const Header = () => {
     }
   }, [isOpen]);
 
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   const handleLogout = async () => {
+    // ensure the ham menu closes when logout is triggered from it
+    setOpen(false);
     await logout();
     window.location.href = "/login";
   };
@@ -46,7 +52,7 @@ const Header = () => {
         <NavLink
           to="/"
           className="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none"
-          onClick={() => setOpen(false)}
+          onClick={handleClose}
         >
           <span className="fs-4">THE WALL</span>
         </NavLink>
@@ -59,9 +65,20 @@ const Header = () => {
                 `nav-link text-white ${isActive ? "active" : ""}`
               }
               end
-              onClick={() => setOpen(false)}
+              onClick={handleClose}
             >
               Home
+            </NavLink>
+          </li>
+          <li className="nav-item">
+            <NavLink
+              to="/my-posts"
+              className={({ isActive }) =>
+                `nav-link text-white ${isActive ? "active" : ""}`
+              }
+              onClick={handleClose}
+            >
+              My Posts
             </NavLink>
           </li>
           <li className="nav-item">
@@ -70,14 +87,14 @@ const Header = () => {
               className={({ isActive }) =>
                 `nav-link text-white ${isActive ? "active" : ""}`
               }
-              onClick={() => setOpen(false)}
+              onClick={handleClose}
             >
               Create Post
             </NavLink>
           </li>
         </ul>
         <hr />
-        <div className="dropdown">
+        {/* <div className="dropdown">
           <a
             href="#"
             className="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
@@ -93,11 +110,55 @@ const Header = () => {
             />
             <strong>mdo</strong>
           </a>
+        </div> */}
+        <div className="d-flex justify-content-center">
+          {isAuthenticated ? (
+            <>
+              <NavLink
+                to="/profile"
+                className="btn btn-outline-light me-2"
+                onClick={handleClose}
+              >
+                Profile
+              </NavLink>
+              <button
+                className="btn btn-danger"
+                type="button"
+                onClick={handleLogout}
+              >
+                Logout
+              </button>
+            </>
+          ) : (
+            <>
+              <NavLink
+                to="/login"
+                className="btn btn-outline-light me-2"
+                onClick={handleClose}
+              >
+                Login
+              </NavLink>
+              <NavLink
+                to="/signup"
+                className="btn btn-warning"
+                onClick={handleClose}
+              >
+                Sign-up
+              </NavLink>
+            </>
+          )}
         </div>
       </div>
-      <header className="p-3 text-bg-dark header ">
-        <div className="d-flex align-items-center justify-content-center justify-content-lg-start navContainer">
-          <ul className="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0 navUl nav-pills mb-auto">
+      <header className="p-3 text-bg-dark header">
+        <div
+          className="d-flex align-items-stretch gap-20 justify-content-between navContainer"
+          style={{ height: "40px" }}
+        >
+          <h2 className="me-4 align-items-center h-100 mb-0">THE WALL</h2>
+          <ul
+            className="nav navUl col-lg-auto mb-2 justify-content-center nav-pills mb-auto h-100 align-items-center"
+            style={{ marginBottom: 0 }}
+          >
             <li className="nav-item">
               <NavLink
                 to="/"
@@ -131,8 +192,8 @@ const Header = () => {
               </NavLink>
             </li>
           </ul>
-          <div className="navTools">
-            <form
+          <div className="navTools ms-4 d-flex align-items-center h-100">
+            {/* <form
               className="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3 searchBar"
               role="search"
             >
@@ -142,7 +203,7 @@ const Header = () => {
                 placeholder="Search..."
                 aria-label="Search"
               />
-            </form>
+            </form> */}
 
             <div className="text-end navBtn">
               {isAuthenticated ? (
@@ -163,14 +224,11 @@ const Header = () => {
                   <NavLink to="/login" className="btn btn-outline-light me-2">
                     Login
                   </NavLink>
-                  <NavLink to="/signup" className="btn btn-warning">
-                    Sign-up
-                  </NavLink>
                 </>
               )}
             </div>
           </div>
-          <div className="hamBtn">
+          <div className="hamBtn align-items-center">
             <Hamburger size={30} toggled={isOpen} toggle={setOpen} />
           </div>
         </div>

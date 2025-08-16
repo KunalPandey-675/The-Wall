@@ -4,7 +4,7 @@ import { IoTrashBin } from "react-icons/io5";
 import usePostStore from "../store/PostStore";
 
 const MyPostCard = ({ post }) => {
-  const removePost = usePostStore((s) => s.removePost);
+  const deletePost = usePostStore((s) => s.deletePost);
   
   return (
     <div className="card" style={{ width: "18rem"}}>
@@ -12,7 +12,7 @@ const MyPostCard = ({ post }) => {
         <h5 className="card-title">{post.title} </h5>
         <span
           className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
-          onClick={() => removePost(post._id)}
+          onClick={() => deletePost(post._id)}
           style={{ cursor: 'pointer' }}
         >
           <IoTrashBin />

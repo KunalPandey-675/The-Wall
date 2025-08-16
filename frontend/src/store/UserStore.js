@@ -163,5 +163,14 @@ const useUserStore = create((set, get) => ({
             get().postFetchFailure(error.response?.data?.message || 'Post Fetch Failed');
         }
     },
+    removeUserPost: (postId) => {
+        set((state) => ({
+            userPosts: state.userPosts.filter(post => post._id !== postId),
+            user: state.user ? {
+                ...state.user,
+                postsCreated: state.user.postsCreated.filter(id => id !== postId)
+            } : null
+        }));
+    },
 }))
 export default useUserStore;

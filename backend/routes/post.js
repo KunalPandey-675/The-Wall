@@ -42,8 +42,8 @@ postRouter.post('/create-post', userAuth, async (req, res) => {
     const { title, body, tags } = req.body
     const postTags = tags.split(',')
     try {
-        const user= await userSchema.findById(createdBy).select('name')
-        const creatorName= user.name
+        const user = await userSchema.findById(createdBy).select('name')
+        const creatorName = user.name
         const newPost = await postSchema.create({
             title,
             body,
@@ -119,15 +119,15 @@ postRouter.put('/update-post', userAuth, async (req, res) => {
 })
 postRouter.get('/all-posts', optionalAuth, async (req, res) => {
     try {
-        const userId = req.userId; 
+        const userId = req.userId;
         const posts = await postSchema.find({});
-        
+
 
         const postsWithLikeStatus = posts.map(post => ({
             ...post.toObject(),
             isLiked: userId && post.likedBy && post.likedBy.includes(userId)
         }));
-        
+
         res.json({
             success: true,
             data: postsWithLikeStatus
@@ -146,9 +146,9 @@ postRouter.patch('/like-post/:postId', userAuth, async (req, res) => {
 
     try {
         const likedPost = await postSchema.findOneAndUpdate(
-            { 
-                _id: postId, 
-                likedBy: { $ne: userId } 
+            {
+                _id: postId,
+                likedBy: { $ne: userId }
             },
             {
                 $inc: { likes: 1 },
@@ -169,9 +169,9 @@ postRouter.patch('/like-post/:postId', userAuth, async (req, res) => {
         }
 
         const unlikedPost = await postSchema.findOneAndUpdate(
-            { 
-                _id: postId, 
-                likedBy: userId 
+            {
+                _id: postId,
+                likedBy: userId
             },
             {
                 $inc: { likes: -1 },
@@ -217,6 +217,28 @@ postRouter.patch('/increment-view/:postId', async (req, res) => {
         res.json({ success: true, data: updatedPost.views });
     } catch (e) {
         console.error("Increment view error:", e);
+        res.status(500).json({ success: false, message: "Internal server error" });
+    }
+});
+postRouter.delete('/delete-post/:postId', userAuth, async (req, res) => {
+    try {
+        const { postId } = req.params;
+        const deletePost = await postSchema.deleteOne({_id: postId});
+
+        if (!deletePost) {
+            return res.status(404).json({ success: false, message: "Post not found" });
+        }
+        // Remove post from user's postsCreated array
+        await userSchema.updateOne(
+            { _id: req.userId },
+            { $pull: { postsCreated: postId } }
+        );
+        res.json({
+            success: true,
+            data: deletePost
+        })
+    } catch (error) {
+        console.error("Increment view error:", error);
         res.status(500).json({ success: false, message: "Internal server error" });
     }
 });

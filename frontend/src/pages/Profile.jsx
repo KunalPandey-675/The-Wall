@@ -1,7 +1,7 @@
 import useUserStore from "../store/UserStore";
 
 const Profile = () => {
-  const { user } = useUserStore();
+  const { user, userPosts } = useUserStore();
 
   if (!user) {
     return (
@@ -43,7 +43,7 @@ const Profile = () => {
                   <div className="mb-3">
                     <label className="form-label fw-bold">Posts Created:</label>
                     <p className="form-control-plaintext">
-                      {user.postsCreated ? user.postsCreated.length : 0}
+                      {userPosts ? userPosts.length : user.postsCreated ? user.postsCreated.length : 0}
                     </p>
                   </div>
                 </div>

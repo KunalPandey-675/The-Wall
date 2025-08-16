@@ -1,13 +1,13 @@
 .appContainer {
   display: flex;
 }
-/* .left {
+.left {
   width: 20%;
   height: 100vh;
   position: sticky;
   top: 0;
   overflow-y: auto;
-} */
+}
 .content {
   width: 100%;
 }
@@ -48,7 +48,7 @@
   padding: 20px;
   flex-wrap: wrap;
 }
-.footer{
+.footer {
   justify-content: center;
 }
 .reactions {
@@ -92,15 +92,46 @@
 }
 @media (max-width: 576px) {
   /* styles for small devices */
-  
-    .searchBar {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      width: 70% !important;
-    }
+  .navUl {
+    display: none !important;
+  }
   .hamBtn {
-    right: 15px  !important;
+    position: absolute;
+    top: 10px;
+    right: 30px;
+    display: flex;
+  }
+  .left {
+    width: 0 !important;
+    height: 0 !important;
+    position: absolute;
+    top: 0;
+    left: -100%;
+  }
+  .content {
+    width: 100% !important;
+    margin-left: 0;
+    padding: 0;
+  }
+  .postList {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+  }
+  .card {
+    width: 90% !important;
+  }
+  .navTools {
+    display: none;
+  }
+  .searchBar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 70% !important;
+  }
+  .hamBtn {
+    right: 15px !important;
   }
   .navBtn {
     display: none;
@@ -134,16 +165,10 @@
   .card {
     width: 20rem !important;
   }
-  .hamBtn {
-    position: absolute;
-    top: 10px;
-    right: 30px;
-    display: flex;
-  }
 }
 
 /* Large devices (desktops) */
-@media (max-width: 992px) {
+/* @media (max-width: 992px) {
   .left {
     width: 22%;
     height: 100vh;
@@ -152,7 +177,6 @@
   .content {
     width: 100%;
   }
-  /* styles for large devices */
   .header {
     .navUl {
       display: none;
@@ -160,7 +184,7 @@
   }
   .navTools {
     display: flex;
-    /* justify-content: space-between; */
+    justify-content: space-between;
     justify-content: center;
     gap: 30px;
     align-items: flex-start;
@@ -173,4 +197,4 @@
       width: 40%;
     }
   }
-}
+} */

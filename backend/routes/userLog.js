@@ -228,7 +228,8 @@ userLogRouter.get(("/my-posts"), userAuth, async (req, res) => {
 
         res.json({
             success: true,
-            data: postData
+            data: postData,
+            count: postData.length // Add post count
         })
     } catch (error) {
         console.error('my-posts error', error)
