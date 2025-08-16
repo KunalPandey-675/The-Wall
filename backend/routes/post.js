@@ -28,7 +28,7 @@ postRouter.post('/create-post', userAuth, async (req, res) => {
     const createdBy = req.userId
     const requiredBody = z.object({
         title: z.string().min(3).max(100),
-        body: z.string().min(10).max(200),
+        body: z.string(),
         tags: z.string()
     })
 
