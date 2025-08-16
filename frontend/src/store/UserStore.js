@@ -94,7 +94,6 @@ const useUserStore = create((set, get) => ({
         set({ loading: true, error: null })
         try {
             const response = await axios.post(`${BASE_URL}/user/sign-up`, credentials, { withCredentials: true })
-            console.log(response.data.data);
             if (response.data?.success) {
                 get().loginSuccess(response.data.data);
                 navigate('/')

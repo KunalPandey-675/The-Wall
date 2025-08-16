@@ -107,7 +107,7 @@ const SignUp = () => {
             name="password"
             value={formData.password}
             onChange={handleChange}
-            placeholder="Password"
+            placeholder="Password(Min. 6 Characters)"
             required
           />
         </div>

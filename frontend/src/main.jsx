@@ -77,7 +77,7 @@ const router = createBrowserRouter([
       },
       {
         path: "*",
-        element: <PostList />,
+        element: <Navigate to="/" replace />,
       },
     ],
   },
