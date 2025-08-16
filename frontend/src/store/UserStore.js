@@ -173,7 +173,6 @@ const useUserStore = create((set, get) => ({
             } else {
                 get().postFetchFailure('Failed to fetch posts');
             }
-            console.log('posts', response.data);
         } catch (error) {
             console.error("Post fetch Error:", error.response?.data);
             get().postFetchFailure(error.response?.data?.message || 'Post Fetch Failed');
