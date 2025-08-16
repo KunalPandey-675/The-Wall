@@ -18,7 +18,7 @@ import OtpVerification from "./pages/OtpVerification.jsx";
 import MyPosts from "./pages/MyPosts.jsx";
 // <-------------Components ----------->
 
-import PostList from "./components/PostList.jsx";
+import PostList from "./pages/PostList.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import AuthenticatedRoute from "./components/AuthenticatedRoute.jsx";
 

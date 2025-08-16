@@ -13,6 +13,50 @@ const app = express()
 const userLogRouter = Router()
 app.use(express.json())
 
+
+userLogRouter.post('/send-otp', async (req, res) => {
+    try {
+        const { email } = req.body;
+        const user = await userSchema.findOne({ email }); // Fix: use userSchema, not User
+        if (user) {
+            return res.status(401).json({
+                success: false,
+                message: "User already registered",
+            });
+        }
+
+        let otp = otpGenerator.generate(6, {
+            upperCaseAlphabets: false,
+            lowerCaseAlphabets: false,
+            specialChars: false,
+        });
+
+        let existingOtp = await otpSchema.findOne({ otp });
+        while (existingOtp) {
+            otp = otpGenerator.generate(6, {
+                upperCaseAlphabets: false,
+                lowerCaseAlphabets: false,
+                specialChars: false,
+            });
+            existingOtp = await otpSchema.findOne({ otp });
+        }
+
+        const response = await otpSchema.create({ email, otp });
+
+        return res.status(200).json({
+            success: true,
+            message: "OTP sent successfully",
+            data: response
+        });
+    } catch (e) {
+        console.log(e);
+        return res.status(500).json({
+            success: false,
+            message: "Error while sending OTP",
+        });
+    }
+});
+
 userLogRouter.post('/sign-up', async (req, res) => {
     const requiredBody = z.object({
         email: z.string().min(3).max(100).email(),
@@ -62,7 +106,19 @@ userLogRouter.post('/sign-up', async (req, res) => {
             name,
             profilePic
         })
-
+        const token = jwt.sign({
+            id: newUser._id
+        }, JWT_USER_SECRET, {
+            expiresIn: "4h",
+        })
+        newUser.token = token
+        await newUser.save()
+        res.cookie("jwt", token, {
+            expires: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
+            httpOnly: true,
+            secure: false,
+            sameSite: "lax",
+        });
         res.status(201).json({
             success: true,
             message: "User signed up successfully",
@@ -76,48 +132,7 @@ userLogRouter.post('/sign-up', async (req, res) => {
     }
 })
 
-userLogRouter.post('/send-otp', async (req, res) => {
-    try {
-        const { email } = req.body;
-        const user = await userSchema.findOne({ email }); // Fix: use userSchema, not User
-        if (user) {
-            return res.status(401).json({
-                success: false,
-                message: "User already registered",
-            });
-        }
 
-        let otp = otpGenerator.generate(6, {
-            upperCaseAlphabets: false,
-            lowerCaseAlphabets: false,
-            specialChars: false,
-        });
-
-        let existingOtp = await otpSchema.findOne({ otp });
-        while (existingOtp) {
-            otp = otpGenerator.generate(6, {
-                upperCaseAlphabets: false,
-                lowerCaseAlphabets: false,
-                specialChars: false,
-            });
-            existingOtp = await otpSchema.findOne({ otp });
-        }
-
-        const response = await otpSchema.create({ email, otp });
-
-        return res.status(200).json({
-            success: true,
-            message: "OTP sent successfully",
-            data: response
-        });
-    } catch (e) {
-        console.log(e);
-        return res.status(500).json({
-            success: false,
-            message: "Error while sending OTP",
-        });
-    }
-});
 
 userLogRouter.post("/sign-in", async (req, res) => {
     const loginSchema = z.object({
@@ -213,7 +228,7 @@ userLogRouter.get(("/my-posts"), userAuth, async (req, res) => {
 
         res.json({
             success: true,
-            data: postData 
+            data: postData
         })
     } catch (error) {
         console.error('my-posts error', error)

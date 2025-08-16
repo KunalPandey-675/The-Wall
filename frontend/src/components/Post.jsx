@@ -9,12 +9,12 @@ const Post = ({ post }) => {
     <div className="card" style={{ width: "18rem"}}>
       <div className="card-body">
         <h5 className="card-title">{post.title} </h5>
-        <span
+        {/* <span
           className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
           onClick={() => removePost(post.id)}
         >
           <IoTrashBin />
-        </span>
+        </span> */}
         <p className="card-text">{post.body}</p>
         <div className="tags">
           {post.tags && post.tags.map((tag) => (
@@ -33,7 +33,7 @@ const Post = ({ post }) => {
           </span>
         </div>
         <div className="bar"></div>
-        <p>{`USER_${post.userId}`} </p>
+        <p>{post.creatorName} </p>
       </div>
     </div>
   );

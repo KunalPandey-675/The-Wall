@@ -36,7 +36,6 @@ const useUserStore = create((set, get) => ({
             const { success, data } = response.data;
 
             if (success && data) {
-                console.log("✅ Authenticated user:", data);
                 set({
                     isAuthenticated: true,
                     user: data,
@@ -78,7 +77,7 @@ const useUserStore = create((set, get) => ({
     signUp: async (credentials, navigate) => {
         set({ loading: true, error: null })
         try {
-            const response = await axios.post(`${BASE_URL}/user/sign-up`, credentials)
+            const response = await axios.post(`${BASE_URL}/user/sign-up`, credentials, { withCredentials: true })
             console.log(response.data.data);
             if (response.data?.success) {
                 get().loginSuccess(response.data.data);
@@ -127,43 +126,26 @@ const useUserStore = create((set, get) => ({
         }
 
     },
-    createPost: async (postData, navigate) => {
+    createPost: async (postData) => {
         set({ loading: true, error: null })
         try {
             const response = await axios.post(`${BASE_URL}/post/create-post`, postData, {
                 withCredentials: true,
             })
-            console.log(response.data.data);
             if (response.data?.success) {
-                navigate('/')
+                return { success: true, data: response.data.data };
+            } else {
+                return { success: false };
             }
         } catch (error) {
             console.error("Post Creation Error:", error.response?.data);
             set({ error: error.response?.data?.message || 'Post Creation Failed' });
+            return { success: false };
         } finally {
             set({ loading: false });
         }
 
     },
-    // myPosts: async () => {
-    //     set({ loading: true, error: null })
-    //     try {
-    //         const response = await axios.get(`${BASE_URL}/user/my-posts`, {
-    //             withCredentials: true,
-    //         })
-    //         if (response.data?.success) {
-    //             get().postFetchSuccess(response.data.data); // Now correctly expects data
-    //         } else {
-    //             get().postFetchFailure('Failed to fetch posts');
-    //         }
-    //         console.log('posts', response.data)
-    //     } catch (error) {
-    //         console.error("Post fetch Error:", error.response?.data);
-    //         get().postFetchFailure(error.response?.data?.message || 'Post Fetch Failed');
-    //     } finally {
-    //         set({ loading: false });
-    //     }
-    // }
     myPosts: async () => {
         get().postFetchStart();
         try {

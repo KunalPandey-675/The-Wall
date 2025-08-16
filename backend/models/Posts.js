@@ -10,6 +10,7 @@ const post = new Schema({
     likes: { type: Number, default: 0 },
     views: { type: Number, default: 0 },
     createdBy: { type: ObjectId, ref: "User", required: true },
+    creatorName:{type:String, default:""}
 }, {
     timestamps: true
 })

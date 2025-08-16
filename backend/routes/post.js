@@ -1,6 +1,6 @@
 const express = require('express')
 const { Router } = require('express')
-const { z } = require('zod')
+const { z, success } = require('zod')
 const { userAuth } = require('../controllers/Auth')
 const { userSchema } = require('../models/User')
 const { postSchema } = require('../models/Posts')
@@ -27,11 +27,14 @@ postRouter.post('/create-post', userAuth, async (req, res) => {
     const { title, body, tags } = req.body
     const postTags = tags.split(',')
     try {
+        const user= await userSchema.findById(createdBy).select('name')
+        const creatorName= user.name
         const newPost = await postSchema.create({
             title,
             body,
             tags: postTags,
-            createdBy
+            createdBy,
+            creatorName
         })
         await userSchema.updateOne({
             _id: createdBy
@@ -41,11 +44,14 @@ postRouter.post('/create-post', userAuth, async (req, res) => {
             }
         })
         res.status(201).json({
-            message: "Post Created successfully"
+            success: true,
+            message: "Post Created successfully",
+            data: newPost
         })
     } catch (e) {
         console.error("Post Creation error:", e)
         return res.status(500).json({
+            success: false,
             message: "Internal server error"
         })
     }
@@ -95,6 +101,13 @@ postRouter.put('/update-post', userAuth, async (req, res) => {
             message: "Internal server error"
         })
     }
+})
+postRouter.get('/all-posts', async (req, res) => {
+    const posts = await postSchema.find({})
+    res.json({
+        success: true,
+        data: posts
+    })
 })
 
 
