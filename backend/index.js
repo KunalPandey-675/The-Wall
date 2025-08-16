@@ -8,7 +8,6 @@ const path = require("path")
 const app = express();
 app.use(cookieParser());
 
-
 const { userLogRouter } = require("./routes/userLog")
 const { adminLogRouter } = require("./routes/adminLog");
 
@@ -17,29 +16,52 @@ const { checkAuthRouter } = require("./routes/authCheck")
 const { userAuth } = require('./controllers/Auth')
 
 app.use(express.json())
+
+// Updated CORS configuration for production
 app.use(cors({
-    origin: ["http://localhost:5173", "https://the-wall-five.vercel.app"],
-    credentials: true
+    origin: function (origin, callback) {
+        // Allow requests with no origin (like mobile apps or curl requests)
+        if (!origin) return callback(null, true);
+        
+        const allowedOrigins = [
+            "http://localhost:5173",
+            "https://the-wall-five.vercel.app",
+            "https://the-wall-backend.onrender.com" // Add your Render backend URL
+        ];
+        
+        if (allowedOrigins.indexOf(origin) !== -1) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'x-csrf-token'],
+    exposedHeaders: ['*', 'Authorization']
 }));
+
+// Handle preflight requests
+app.options('*', cors());
+
 app.use("/api/user", userLogRouter)
 app.use("/api/admin", adminLogRouter)
 app.use("/api/post", postRouter)
 app.use("/api/auth", userAuth, checkAuthRouter)
-
 
 app.get("/", (req, res) => {
     res.json({
         message: "hello world!!"
     })
 })
-app.use(express.static(path.join(__dirname, '../frontend/dist')));
 
+app.use(express.static(path.join(__dirname, '../frontend/dist')));
 
 async function main() {
     await mongoose.connect(process.env.MONGO_URL)
-    const PORT = 3000;
+    const PORT = process.env.PORT || 3000;
     app.listen(PORT, () => {
-        console.log(`Server running on address http://localhost:${PORT}`);
+        console.log(`Server running on port ${PORT}`);
     });
 }
 main()
