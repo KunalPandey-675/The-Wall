@@ -1,33 +1,46 @@
 const express = require('express')
 const { Router } = require('express')
 const { userSchema } = require('../models/User')
-const { userAuth } = require('../controllers/Auth')
+const jwt = require("jsonwebtoken")
 
-const app = express()
 const checkAuthRouter = Router()
-app.use(express.json())
 
-checkAuthRouter.get("/check", userAuth, async (req, res) => {
+// Remove userAuth middleware from this specific route
+checkAuthRouter.get("/check", async (req, res) => {
     try {
-        const user = await userSchema.findById(req.userId).select('-password');
+        const token = req.cookies.jwt;
+        
+        if (!token) {
+            return res.status(200).json({
+                success: false,
+                message: "No token provided",
+                authenticated: false
+            });
+        }
+
+        const decoded = jwt.verify(token, process.env.JWT_USER_SECRET);
+        const user = await userSchema.findById(decoded.id).select('-password');
 
         if (!user) {
-            return res.status(404).json({
+            return res.status(200).json({
                 success: false,
                 message: "User not found",
+                authenticated: false
             });
         }
 
         return res.status(200).json({
             success: true,
             message: "User authenticated",
+            authenticated: true,
             data: user,
         });
     } catch (error) {
         console.log("Error in checkAuth controller", error.message);
-        res.status(500).json({ 
+        res.status(200).json({ 
             success: false,
-            message: "Internal Server Error" 
+            message: "Invalid or expired token",
+            authenticated: false
         });
     }
 })

@@ -13,7 +13,7 @@ const userAuth = (req, res, next) => {
             message: "Invalid Credentials"
         })
     }
-}
+}   
 
 const adminAuth = (req, res, next) => {
     const token = req.headers.token

@@ -42,7 +42,6 @@ const useUserStore = create((set, get) => ({
                     loading: false,
                 });
             } else {
-                console.warn("⚠️ Auth check failed:", response.data);
                 set({ isAuthenticated: false, user: null, loading: false });
             }
         }
