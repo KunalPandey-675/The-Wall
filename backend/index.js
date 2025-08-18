@@ -44,7 +44,7 @@ app.use(cors({
 app.use("/api/user", userLogRouter)
 app.use("/api/admin", adminLogRouter)
 app.use("/api/post", postRouter)
-app.use("/api/auth", userAuth, checkAuthRouter)
+app.use("/api/auth", checkAuthRouter)
 
 app.get("/", (req, res) => {
     res.json({
