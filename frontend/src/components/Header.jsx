@@ -21,7 +21,7 @@ const Header = () => {
   const closeSidebar = () => {
     gsap.to(sidebarRef.current, {
       left: "-100%",
-      duration: 1.5,
+      duration: 0.5, // Changed from 1.5 to 0.5 for consistency
       ease: "power2.out",
     });
   };
@@ -56,6 +56,11 @@ const Header = () => {
     if (result.success) {
       setShowLogoutPopup(true);
     }
+  };
+
+  // Add this handler to properly sync hamburger state
+  const handleHamburgerToggle = (toggled) => {
+    setOpen(toggled);
   };
 
   return (
@@ -234,7 +239,11 @@ const Header = () => {
             </div>
           </div>
           <div className="hamBtn align-items-center">
-            <Hamburger size={30} toggled={isOpen} toggle={setOpen} />
+            <Hamburger 
+              size={30} 
+              toggled={isOpen} 
+              toggle={handleHamburgerToggle} 
+            />
           </div>
         </div>
       </header>
