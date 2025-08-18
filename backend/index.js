@@ -35,10 +35,10 @@ app.use(cors({
             callback(new Error('Not allowed by CORS'));
         }
     },
-    credentials: true, // This is crucial for cookies
+    credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'Cookie'],
-    exposedHeaders: ['Set-Cookie']
+    allowedHeaders: ['Content-Type', 'Authorization', 'x-csrf-token'],
+    exposedHeaders: ['*', 'Authorization']
 }));
 
 app.use("/api/user", userLogRouter)

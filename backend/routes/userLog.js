@@ -116,9 +116,8 @@ userLogRouter.post('/sign-up', async (req, res) => {
         res.cookie("jwt", token, {
             expires: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
             httpOnly: true,
-            secure: true, // Always use secure in production AND for cross-origin
-            sameSite: 'none', // Required for cross-origin cookies
-            domain: process.env.NODE_ENV === 'production' ? '.onrender.com' : undefined
+            secure: process.env.NODE_ENV === 'production', // Only secure in production
+            sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax', // 'none' for cross-origin in production
         });
         res.status(201).json({
             success: true,
@@ -176,9 +175,8 @@ userLogRouter.post("/sign-in", async (req, res) => {
         res.cookie("jwt", token, {
             expires: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
             httpOnly: true,
-            secure: true, // Always use secure in production AND for cross-origin
-            sameSite: 'none', // Required for cross-origin cookies
-            domain: process.env.NODE_ENV === 'production' ? '.onrender.com' : undefined
+            secure: process.env.NODE_ENV === 'production', // Only secure in production
+            sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax', // 'none' for cross-origin in production
         });
         res.json({
             success: true,
