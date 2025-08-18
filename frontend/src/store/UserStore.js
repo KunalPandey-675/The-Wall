@@ -72,6 +72,12 @@ const useUserStore = create((set, get) => ({
                 userPosts: []
             });
             
+            // Force a re-check of authentication status
+            // This will verify the cookie is actually cleared
+            setTimeout(() => {
+                get().checkAuth();
+            }, 100);
+            
             return { success: true, message: "Logged out successfully!" };
         } catch (error) {
             console.error("Logout error:", error);
@@ -86,7 +92,7 @@ const useUserStore = create((set, get) => ({
                 userPosts: []
             });
             
-            return { success: true, message: "Logged out successfully!" }; // Still show success since user is logged out locally
+            return { success: true, message: "Logged out successfully!" };
         }
     },
 
