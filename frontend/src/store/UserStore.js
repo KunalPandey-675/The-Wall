@@ -56,7 +56,7 @@ const useUserStore = create((set, get) => ({
         }
     },
 
-    logout: async () => {
+    logout: async (navigate) => {
         try {
             await axios.post(`${BASE_URL}/user/logout`, {}, {
                 withCredentials: true,
@@ -72,11 +72,10 @@ const useUserStore = create((set, get) => ({
                 userPosts: []
             });
             
-            // Force a re-check of authentication status
-            // This will verify the cookie is actually cleared
-            setTimeout(() => {
-                get().checkAuth();
-            }, 100);
+            // Redirect to login page
+            if (navigate) {
+                navigate('/login');
+            }
             
             return { success: true, message: "Logged out successfully!" };
         } catch (error) {
